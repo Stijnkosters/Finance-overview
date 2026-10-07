@@ -64,7 +64,16 @@ async function gatherShop(shop: ShopCfg, from: string, to: string) {
   let cogsSource = "costs.json";
   let cogsWarning: string | null = null;
   if (shop.nichebay && nichebayConfigured()) {
-    try { const r = await fetchNicheBayCostByOrder(); nbMap = r.map; cogsSource = "nichebay"; }
+    // nbMap = inkoop per order in EUR (NicheBay rekent in USD; omgerekend in lib/nichebay.ts)
+    try {
+      const r = await fetchNicheBayCostByOrder(); nbMap = r.map; cogsSource = "nichebay";
+      const w: string[] = [];
+      if (r.truncated) w.push("NicheBay: veiligheidsgrens voor het aantal orders bereikt; mogelijk ontbreekt de inkoop van oudere orders.");
+      if (r.fx.noDate > 0) w.push(`Inkoop: ${r.fx.noDate} orders zonder datum; daar is geen dagkoers van de order voor.`);
+      const zonderEcb = r.fx.nichebay + r.fx.nood + r.fx.onbekend;
+      if (zonderEcb > 0) w.push(`Inkoop: ${zonderEcb} orders niet met de ECB-dagkoers omgerekend (${r.fx.nichebay} met de eurokoers van NicheBay, ${r.fx.nood} met noodkoers 0,92, ${r.fx.onbekend} valuta onbekend).`);
+      if (w.length) cogsWarning = w.join(" ");
+    }
     catch (e: any) { cogsWarning = `NicheBay-koppeling faalde (${e.message}). Val terug op costs.json.`; }
   }
 

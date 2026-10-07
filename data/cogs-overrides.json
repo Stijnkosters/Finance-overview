@@ -1,6 +1,8 @@
 {
+  "_uitleg_plugwave": "De opslag van 8,06 bij PlugWave is op 7 okt 2026 weggehaald. Aanwijzing, nog te bevestigen door Stijn: het bedrag van NicheBay stijgt per extra PlugWave in dezelfde order met ongeveer 8 dollar (1 stuk 16,47, 2 stuks 24,50), dus het product lijkt al in dat bedrag te zitten en de opslag lijkt dubbel te tellen. Terugzetten: \"addContains\": { \"plugwave\": 8.06 }.",
   "_uitleg": "hideContains: producten (naam bevat, kleine letters) die uit de marge-tab verdwijnen. addContains: bedrag dat bij de NicheBay-COGS wordt opgeteld als de naam de sleutel bevat (bijv. voor bulk-ingekochte voorraad waar NicheBay alleen verzending rekent).",
   "hideContains": [
+    "verzekerde verzending",
     "plugwave - best",
     "wandklok van hout met rustige uitstraling",
     "houten wandklok met rustige uitstraling voor het interieur",
@@ -8,5 +10,5 @@
     "hoe dashcams je premie kunnen verlagen",
     "carplay als persoonlijke assistent"
   ],
-  "addContains": { "plugwave": 8.06 }
+  "addContains": {}
 }

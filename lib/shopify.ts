@@ -2,7 +2,7 @@ type ShopifyCfg = { store?: string; token?: string; version?: string };
 
 const DEFAULT_VERSION = process.env.SHOPIFY_API_VERSION || "2026-01";
 
-export async function shopifyGraphQL(query: string, variables: any = {}, cfg?: ShopifyCfg) {
+export async function shopifyGraphQL(query: string, variables: any = {}, cfg?: ShopifyCfg, signal?: AbortSignal) {
   const store = cfg?.store ?? process.env.SHOPIFY_STORE_DOMAIN;
   const token = cfg?.token ?? process.env.SHOPIFY_ADMIN_TOKEN;
   const version = cfg?.version ?? DEFAULT_VERSION;
@@ -17,6 +17,7 @@ export async function shopifyGraphQL(query: string, variables: any = {}, cfg?: S
     },
     body: JSON.stringify({ query, variables }),
     cache: "no-store",
+    signal,
   });
   if (!res.ok) {
     const text = await res.text();

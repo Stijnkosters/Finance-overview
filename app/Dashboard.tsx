@@ -1510,7 +1510,7 @@ function ProductMargins({ shop }: { shop: string }) {
           <span className="fixed-year mono">{data?.cached ? `cache ${Math.round((data.ageHours || 0))}u oud` : "vers berekend"}</span>
         </div>
         <div className="fixed-note muted">
-          Per land: verkoopprijs = wat klanten in dat land betaalden, inkoop (COGS) = de actuele all-in prijs uit NicheBay incl. tax/tarief. Fees geschat op 1,8% + €0,25. <b>Break-even ROAS</b> = verkoop ÷ winst — laag = veel advertentieruimte, hoog = kwetsbaar. Standaard op meest verkocht: bovenaan je bestsellers — hoog volume + dunne marge = beste onderhandelkaart bij je leverancier.
+          Per land, indicatief: verkoopprijs = de huidige prijs in Shopify voor dat land, vóór korting (na een prijswijziging: open dit tabblad opnieuw na hoogstens 5 minuten, of klik Ververs nu); geeft Shopify geen prijs, dan de meest voorkomende prijs uit de orders (houd de muis op het bedrag voor de bron).{data?.rows?.length ? ` ${data.pricesFromShopify ?? 0} van de ${data.rows.length} rijen hebben de Shopify-prijs.` : ""}{data?.priceWarning ? ` ${data.priceWarning}` : ""} Inkoop (COGS) = de laatste all-in prijs per stuk uit NicheBay incl. tax/tarief, omgerekend van dollars naar euro's (ECB-dagkoers); houd de muis op het bedrag voor de datum.{data?.fxMissing ? ` Bij ${data.fxMissing} rij(en) was er geen wisselkoers voor de prijs uit de orders; die staan er alleen als Shopify een prijs gaf.` : ""}{data?.skipped ? ` ${data.skipped} order(s) tellen niet (volledig) mee: valuta, datum of annulering niet te duiden.` : ""}{data?.truncated ? " Alleen de 3.000 nieuwste orders zijn bekeken." : ""}{data?.refreshWarning ? ` ${data.refreshWarning}` : ""} Fees geschat op 1,8% + €0,25. <b>Break-even ROAS</b> = verkoop ÷ winst — laag = veel advertentieruimte, hoog = kwetsbaar. Standaard op meest verkocht: bovenaan je bestsellers — hoog volume + dunne marge = beste onderhandelkaart bij je leverancier.
         </div>
       </div>
 
@@ -1547,8 +1547,8 @@ function ProductMargins({ shop }: { shop: string }) {
                 <tr key={i}>
                   <td>{r.product}{r.basis === "verdeeld" && <span className="risetag" style={{ color: "var(--muted)" }} title="COGS geschat uit multi-product orders">~</span>}</td>
                   <td className="r mono b">{r.units}</td>
-                  <td className="r mono">{eur(r.verkoop)}</td>
-                  <td className="r mono">{eur(r.cogs)}</td>
+                  <td className="r mono" title={r.verkoopBron === "shopify" ? `huidige prijs in Shopify${r.verkoopOrders && Math.abs(r.verkoopOrders - r.verkoop) >= 0.01 ? `; in de orders meestal ${eur(r.verkoopOrders)}` : ""}` : "meest voorkomende prijs in de orders"}>{eur(r.verkoop)}</td>
+                  <td className="r mono" title={r.cogsDate ? `prijs van ${r.cogsDate}${r.basis === "meer-stuks" ? " (order met meer stuks, per stuk)" : r.basis === "verdeeld" ? " (geschat uit een order met meer producten)" : ""}` : undefined}>{eur(r.cogs)}</td>
                   <td className="r mono muted">{eur(r.fees)}</td>
                   <td className="r mono b" style={{ color: r.winst < 0 ? "var(--down)" : "var(--up)" }}>{eur(r.winst)}</td>
                   <td className="r mono">{r.margePct != null ? r.margePct.toFixed(1) + "%" : "—"}</td>
